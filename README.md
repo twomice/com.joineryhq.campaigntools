@@ -1,7 +1,5 @@
 # CiviCRM: Joinery Campaign Tools
 
-![Screenshot](/images/screenshot.png)
-
 Collection of usability improvements for CiviCampaign
 
 The extension is licensed under [GPL-3.0](LICENSE.txt).
