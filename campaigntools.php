@@ -15,6 +15,55 @@ function campaigntools_civicrm_pageRun(&$page) {
 }
 
 /**
+ * Implements hook_civicrm_buildForm().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
+ */
+function campaigntools_civicrm_buildForm($formName, &$form) {
+  // Detect contribution page and contribution confirm page
+  if (
+      $formName === 'CRM_Contribute_Form_Contribution_Main'
+      || $formName === 'CRM_Contribute_Form_Contribution_Confirm'
+      || $formName === 'CRM_Event_Form_Registration_Register'
+      || $formName === 'CRM_Event_Form_Registration_Confirm'
+    ) {
+    // Get the campaign_ids that was set in civicrm.setting.php
+    // with the profcond ext enabled EX:
+    // $civicrm_setting['com.joineryhq.campaigntools']['com.joineryhq.campaigntools'] = array(
+    //   'campaign_ids' => array(
+    //     1, 2,
+    //   ),
+    // );
+    $settings = CRM_Core_BAO_Setting::getItem(NULL, 'com.joineryhq.campaigntools');
+    // Get the campaign id by the entryURL in the controler array
+    $controller = $form->getVar('controller');
+    // Process to get the campaign id in the parameter
+    $params = explode('?', $controller->_entryURL);
+    parse_str(end($params), $parseURL);
+    $paramItems = [];
+
+    // Remove amp; since it was not remove using parse_str
+    foreach($parseURL as $key => $value) {
+      $newKey = str_replace('amp;', '', $key);
+      $paramItems[$newKey] = $value;
+    }
+
+    // Check if campaign id is set and match it on the ones in campaign_ids
+    if (isset($paramItems['campaign']) && in_array($paramItems['campaign'], $settings['campaign_ids'])) {
+      // $form->setVar is not working so I used this one
+      // set campaign_id in values array so it will be save in the database
+
+      // If its an event, save it under values event array
+      if(!empty($form->_values['event'])) {
+        $form->_values['event']['campaign_id'] = $paramItems['campaign'];
+      } else {
+        $form->_values['campaign_id'] = $paramItems['campaign'];
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
