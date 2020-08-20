@@ -7,7 +7,7 @@ CRM.$(document).ready(function($){
     var t = CRM.$(this);
     var dt = t.DataTable();
     var data = dt.rows('*').data();
-    var ids = []
+    var ids = [];
     CRM.$(data).each( function(key, val) {
       ids.push(val.DT_RowId);
     });
@@ -20,14 +20,14 @@ CRM.$(document).ready(function($){
     }).done(function(result) {
       // Remove any existing  campaign labels.
       t.find('tr div.campaigntools-campaign').remove();
-      for (i in result.values) {
+      for (var i in result.values) {
         key = i;
         val = result.values[i];
         // $(this).find('tr#' + trId + '>'+ tdSelector).append('<div class="relationshipjobtitle-jobtitle"><em>(' + jobTitles[i] + ')</em></div>')
         if (CRM._.has(val, 'campaign_id')) {
-          console.log(key, val['api.Campaign.getsingle']['title']);
+          console.log(key, val['api.Campaign.getsingle'].title);
           console.log('tr#' + key, t.find('tr#' + key + ' td:first-child'));
-          t.find('tr#' + key + ' td:first-child').append('<div class="campaigntools-campaign"><em>(' +  val['api.Campaign.getsingle']['title'] + ')</em></div>');
+          t.find('tr#' + key + ' td:first-child').append('<div class="campaigntools-campaign"><em>(' +  val['api.Campaign.getsingle'].title + ')</em></div>');
         }
       }
     });

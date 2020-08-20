@@ -3,7 +3,7 @@
 require_once 'campaigntools.civix.php';
 
 /**
- * Implementation of hook_civicrm_pageRun
+ * Implements hook_civicrm_pageRun().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_pageRun
  */
@@ -13,7 +13,6 @@ function campaigntools_civicrm_pageRun(&$page) {
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.campaigntools', 'js/campaigntools.js');
   }
 }
-
 
 /**
  * Implements hook_civicrm_config().
@@ -141,24 +140,24 @@ function campaigntools_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * Implements hook_civicrm_preProcess().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function campaigntools_civicrm_preProcess($formName, &$form) {
+ */
+// function campaigntools_civicrm_preProcess($formName, &$form) {
 
-} // */
+// } // */
 
 /**
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
-function campaigntools_civicrm_navigationMenu(&$menu) {
-  _campaigntools_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => ts('The Page', array('domain' => 'com.joineryhq.campaigntools')),
-    'name' => 'the_page',
-    'url' => 'civicrm/the-page',
-    'permission' => 'access CiviReport,access CiviContribute',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _campaigntools_civix_navigationMenu($menu);
-} // */
+ */
+// function campaigntools_civicrm_navigationMenu(&$menu) {
+//   _campaigntools_civix_insert_navigation_menu($menu, NULL, array(
+//     'label' => ts('The Page', array('domain' => 'com.joineryhq.campaigntools')),
+//     'name' => 'the_page',
+//     'url' => 'civicrm/the-page',
+//     'permission' => 'access CiviReport,access CiviContribute',
+//     'operator' => 'OR',
+//     'separator' => 0,
+//   ));
+//   _campaigntools_civix_navigationMenu($menu);
+// }
