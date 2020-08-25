@@ -15,6 +15,52 @@ function campaigntools_civicrm_pageRun(&$page) {
 }
 
 /**
+ * Implements hook_civicrm_buildForm().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
+ */
+function campaigntools_civicrm_buildForm($formName, &$form) {
+  // Detect contribution page and contribution confirm page
+  if (
+      $formName === 'CRM_Contribute_Form_Contribution_Main'
+      || $formName === 'CRM_Contribute_Form_Contribution_Confirm'
+      || $formName === 'CRM_Event_Form_Registration_Register'
+      || $formName === 'CRM_Event_Form_Registration_Confirm'
+    ) {
+
+    // Get the campaign id by the entryURL in the controler array
+    $controller = $form->getVar('controller');
+    // Process to get the campaign id in the parameter
+    $params = explode('?', $controller->_entryURL);
+    parse_str(end($params), $parseURL);
+
+    // Remove amp; since it was not remove using parse_str
+    foreach ($parseURL as $key => $value) {
+      $newKey = str_replace('amp;', '', $key);
+
+      // Check if campaign param exist
+      if ($newKey === 'campaign') {
+        // Check campaign param exist on database
+        $campaignCount = civicrm_api3('Campaign', 'getcount', [
+          'id' => $value,
+        ]);
+
+        // If campaign param exist on database, add campaign to values
+        if ($campaignCount) {
+          if (!empty($form->_values['event'])) {
+            $form->_values['event']['campaign_id'] = $value;
+          } else {
+            $form->_values['campaign_id'] = $value;
+          }
+        }
+
+        break;
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_config().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
