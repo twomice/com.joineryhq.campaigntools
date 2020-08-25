@@ -41,18 +41,20 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
       // Check if campaign param exist
       if ($newKey === 'campaign') {
         // Check campaign param exist on database
-        $campaign = civicrm_api3('Campaign', 'getcount', [
+        $campaignCount = civicrm_api3('Campaign', 'getcount', [
           'id' => $value,
         ]);
 
         // If campaign param exist on database, add campaign to values
-        if ($campaign) {
+        if ($campaignCount) {
           if (!empty($form->_values['event'])) {
             $form->_values['event']['campaign_id'] = $value;
           } else {
             $form->_values['campaign_id'] = $value;
           }
         }
+
+        break;
       }
     }
   }
