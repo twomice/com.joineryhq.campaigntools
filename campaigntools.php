@@ -35,12 +35,12 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
     parse_str(end($params), $parseURL);
 
     // Remove amp; since it was not remove using parse_str
-    foreach($parseURL as $key => $value) {
+    foreach ($parseURL as $key => $value) {
       $newKey = str_replace('amp;', '', $key);
 
       // Check if campaign param exist
       if ($newKey === 'campaign') {
-        // Check campaign param if exist on database
+        // Check campaign param exist on database
         $campaign = civicrm_api3('Campaign', 'getcount', [
           'id' => $value,
         ]);
