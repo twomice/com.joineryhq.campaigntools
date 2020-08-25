@@ -27,14 +27,12 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
       || $formName === 'CRM_Event_Form_Registration_Register'
       || $formName === 'CRM_Event_Form_Registration_Confirm'
     ) {
-    // Get the campaign_ids that was set in civicrm.setting.php
-    // with the profcond ext enabled EX:
-    // $civicrm_setting['com.joineryhq.campaigntools']['com.joineryhq.campaigntools'] = array(
-    //   'campaign_ids' => array(
-    //     1, 2,
-    //   ),
-    // );
-    $settings = CRM_Core_BAO_Setting::getItem(NULL, 'com.joineryhq.campaigntools');
+    // List all campaign ids available
+    $campaign = array(
+      'ids' => array(
+        1, 2,
+      ),
+    );
     // Get the campaign id by the entryURL in the controler array
     $controller = $form->getVar('controller');
     // Process to get the campaign id in the parameter
@@ -49,7 +47,7 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
     }
 
     // Check if campaign id is set and match it on the ones in campaign_ids
-    if (isset($paramItems['campaign']) && in_array($paramItems['campaign'], $settings['campaign_ids'])) {
+    if (isset($paramItems['campaign']) && in_array($paramItems['campaign'], $campaign['ids'])) {
       // $form->setVar is not working so I used this one
       // set campaign_id in values array so it will be save in the database
 
