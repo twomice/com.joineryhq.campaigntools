@@ -49,7 +49,8 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
         if ($campaignCount) {
           if (!empty($form->_values['event'])) {
             $form->_values['event']['campaign_id'] = $value;
-          } else {
+          }
+          else {
             $form->_values['campaign_id'] = $value;
           }
         }
