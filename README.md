@@ -1,8 +1,16 @@
 # CiviCRM: Joinery Campaign Tools
 
-Collection of usability improvements for CiviCampaign
+Collection of usability improvements for CiviCampaign:
+
+* Adds a "campaign" column to the contact Activities tab; 
+* Accepts a `campaign` URL parameter in contributions pages and event pages, causing the newly created entities (contributions, participants, activities) to be associated with the given campaign.
 
 The extension is licensed under [GPL-3.0](LICENSE.txt).
+
+## Usage
+* No configuration is needed.
+* This extension automatically adds a "campaign" column to the contact Activities tab, showing the campaign, if any, for each activity.
+* For any online registration form or contribution page, you can force the campaign for all newly created entities (contributions, participants, activities) by appending a `campaign` parameter to the page URL, in the format https://example.org/civicrm/contribute/transact?reset=1&id=7&campaign=N, where N is any valid campaign ID.
 
 ## Support
 ![screenshot](/images/joinery-logo.png)
