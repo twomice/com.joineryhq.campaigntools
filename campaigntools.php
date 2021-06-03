@@ -1,6 +1,7 @@
 <?php
 
 require_once 'campaigntools.civix.php';
+use CRM_Campaigntools_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_pageRun().
@@ -58,6 +59,25 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
         break;
       }
     }
+  }
+}
+
+/**
+ * Implements hook_civicrm_searchColumns().
+ *
+ */
+function campaigntools_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$selector ) {
+  // Check if it is search contribution
+  // !empty($rows) will prevent sql error if contact doesn't have contribution
+  if ($objectName == 'contribution' && !empty($rows)) {
+    // Insert additional column header in the tab
+    $insertedHeader = [
+      'name' => E::ts('Campaign'),
+      'field_name' => 'campaign',
+      'direction' => CRM_Utils_Sort::DONTCARE,
+      'weight' => 45,
+    ];
+    $headers[] = $insertedHeader;
   }
 }
 
