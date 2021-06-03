@@ -10,7 +10,12 @@ use CRM_Campaigntools_ExtensionUtil as E;
  */
 function campaigntools_civicrm_pageRun(&$page) {
   // Only take action on the Activities tab.
-  if ($page->getVar('_name') == 'CRM_Activity_Page_Tab' && $page->_action == CRM_Core_Action::BROWSE) {
+  // and campaigntools_show_campaign_in_activities_tab setting is checked
+  if (
+    $page->getVar('_name') == 'CRM_Activity_Page_Tab'
+    && $page->_action == CRM_Core_Action::BROWSE
+    && Civi::settings()->get('campaigntools_show_campaign_in_activities_tab')
+  ) {
     CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.campaigntools', 'js/campaigntools.js');
   }
 }
@@ -69,7 +74,12 @@ function campaigntools_civicrm_buildForm($formName, &$form) {
 function campaigntools_civicrm_searchColumns( $objectName, &$headers,  &$rows, &$selector ) {
   // Check if it is search contribution
   // !empty($rows) will prevent sql error if contact doesn't have contribution
-  if ($objectName == 'contribution' && !empty($rows)) {
+  // campaigntools_show_campaign_in_contributions_tab setting is checked
+  if (
+    $objectName == 'contribution'
+    && !empty($rows)
+    && Civi::settings()->get('campaigntools_show_campaign_in_contributions_tab')
+  ) {
     // Insert additional column header in the tab
     $insertedHeader = [
       'name' => E::ts('Campaign'),
@@ -217,14 +227,57 @@ function campaigntools_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  */
-// function campaigntools_civicrm_navigationMenu(&$menu) {
-//   _campaigntools_civix_insert_navigation_menu($menu, NULL, array(
-//     'label' => ts('The Page', array('domain' => 'com.joineryhq.campaigntools')),
-//     'name' => 'the_page',
-//     'url' => 'civicrm/the-page',
-//     'permission' => 'access CiviReport,access CiviContribute',
-//     'operator' => 'OR',
-//     'separator' => 0,
-//   ));
-//   _campaigntools_civix_navigationMenu($menu);
-// }
+function campaigntools_civicrm_navigationMenu(&$menu) {
+  $pages = array(
+    'settings_page' => array(
+      'label' => E::ts('Campaigntools'),
+      'name' => 'Campaigntools',
+      'url' => 'civicrm/admin/campaigntools/settings?reset=1',
+      'parent' => array('Administer', 'System Settings'),
+      'permission' => 'access CiviCRM',
+    ),
+  );
+
+  foreach ($pages as $page) {
+    // Check that our item doesn't already exist.
+    $menu_item_properties = array('url' => $page['url']);
+    $existing_menu_items = array();
+    CRM_Core_BAO_Navigation::retrieve($menu_item_properties, $existing_menu_items);
+    if (empty($existing_menu_items)) {
+      // Now we're sure it doesn't exist; add it to the menu.
+      $menuPath = implode('/', $page['parent']);
+      unset($page['parent']);
+      _campaigntools_civix_insert_navigation_menu($menu, $menuPath, $page);
+    }
+  }
+}
+
+/**
+ * Log CiviCRM API errors to CiviCRM log.
+ */
+function _campaigntools_log_api_error(API_Exception $e, string $entity, string $action, array $params) {
+  $logMessage = "CiviCRM API Error '{$entity}.{$action}': " . $e->getMessage() . '; ';
+  $logMessage .= "API parameters when this error happened: " . json_encode($params) . '; ';
+  $bt = debug_backtrace();
+  $errorLocation = "{$bt[1]['file']}::{$bt[1]['line']}";
+  $logMessage .= "Error API called from: $errorLocation";
+  CRM_Core_Error::debug_log_message($logMessage);
+}
+
+/**
+ * CiviCRM API wrapper. Wraps with try/catch, redirects errors to log, saves
+ * typing.
+ */
+function _campaigntools_civicrmapi(string $entity, string $action, array $params, bool $silence_errors = TRUE) {
+  try {
+    $result = civicrm_api3($entity, $action, $params);
+  }
+  catch (API_Exception $e) {
+    _campaigntools_log_api_error($e, $entity, $action, $params);
+    if (!$silence_errors) {
+      throw $e;
+    }
+  }
+
+  return $result;
+}
