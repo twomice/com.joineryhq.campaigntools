@@ -230,10 +230,10 @@ function campaigntools_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 function campaigntools_civicrm_navigationMenu(&$menu) {
   $pages = array(
     'settings_page' => array(
-      'label' => E::ts('Campaigntools'),
-      'name' => 'Campaigntools',
+      'label' => E::ts('CampaignTools Settings'),
+      'name' => 'CampaignTools Settings',
       'url' => 'civicrm/admin/campaigntools/settings?reset=1',
-      'parent' => array('Administer', 'System Settings'),
+      'parent' => array('Administer', 'CiviCampaign'),
       'permission' => 'access CiviCRM',
     ),
   );
