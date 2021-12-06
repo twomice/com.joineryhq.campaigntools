@@ -2,7 +2,8 @@
 
 Collection of usability improvements for CiviCampaign:
 
-* Adds a "campaign" column to the contact Activities tab; 
+* Adds a "campaign" column, to the contact Contributions tab; this column displays the name of the contribution campaign (if any);
+* Appends the name of the activity campaign (if any) to the value of the "Type" column for each activity in the contact Contributions tab; 
 * Accepts a `campaign` URL parameter in contributions pages and event pages, causing the newly created entities (contributions, participants, activities) to be associated with the given campaign.
 
 The extension is licensed under [GPL-3.0](LICENSE.txt).
