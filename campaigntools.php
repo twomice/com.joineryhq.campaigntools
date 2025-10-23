@@ -162,7 +162,7 @@ function campaigntools_civicrm_navigationMenu(&$menu) {
 /**
  * Log CiviCRM API errors to CiviCRM log.
  */
-function _campaigntools_log_api_error(API_Exception $e, string $entity, string $action, array $params) {
+function _campaigntools_log_api_error(CRM_Core_Exception $e, string $entity, string $action, array $params) {
   $logMessage = "CiviCRM API Error '{$entity}.{$action}': " . $e->getMessage() . '; ';
   $logMessage .= "API parameters when this error happened: " . json_encode($params) . '; ';
   $bt = debug_backtrace();
@@ -179,7 +179,7 @@ function _campaigntools_civicrmapi(string $entity, string $action, array $params
   try {
     $result = civicrm_api3($entity, $action, $params);
   }
-  catch (API_Exception $e) {
+  catch (CRM_Core_Exception $e) {
     _campaigntools_log_api_error($e, $entity, $action, $params);
     if (!$silence_errors) {
       throw $e;
