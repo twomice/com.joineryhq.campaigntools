@@ -8,17 +8,6 @@ use CRM_Campaigntools_ExtensionUtil as E;
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_pageRun
  */
-function campaigntools_civicrm_pageRun(&$page) {
-  // Only take action on the Activities tab.
-  // and campaigntools_show_campaign_in_activities_tab setting is checked
-  if (
-    $page->getVar('_name') == 'CRM_Activity_Page_Tab'
-    && $page->_action == CRM_Core_Action::BROWSE
-    && Civi::settings()->get('campaigntools_show_campaign_in_activities_tab')
-  ) {
-    CRM_Core_Resources::singleton()->addScriptFile('com.joineryhq.campaigntools', 'js/campaigntools.js');
-  }
-}
 
 /**
  * Implements hook_civicrm_buildForm().
