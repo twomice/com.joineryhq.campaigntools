@@ -2,8 +2,8 @@
 
 use CRM_Campaigntools_ExtensionUtil as E;
 
-return array(
-  'campaigntools_show_campaign_in_contributions_tab' => array(
+return [
+  'campaigntools_show_campaign_in_contributions_tab' => [
     'group_name' => 'Campaigntools',
     'group' => 'campaigntools',
     'name' => 'campaigntools_show_campaign_in_contributions_tab',
@@ -16,5 +16,5 @@ return array(
     'type' => 'Boolean',
     'quick_form_type' => 'YesNo',
     'html_type' => 'Checkbox',
-  ),
-);
+  ],
+];

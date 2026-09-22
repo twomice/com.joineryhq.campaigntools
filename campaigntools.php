@@ -124,20 +124,20 @@ function campaigntools_civicrm_enable() {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  */
 function campaigntools_civicrm_navigationMenu(&$menu) {
-  $pages = array(
-    'settings_page' => array(
+  $pages = [
+    'settings_page' => [
       'label' => E::ts('CampaignTools Settings'),
       'name' => 'CampaignTools Settings',
       'url' => 'civicrm/admin/campaigntools/settings?reset=1',
-      'parent' => array('Administer', 'CiviCampaign'),
+      'parent' => ['Administer', 'CiviCampaign'],
       'permission' => 'access CiviCRM',
-    ),
-  );
+    ],
+  ];
 
   foreach ($pages as $page) {
     // Check that our item doesn't already exist.
-    $menu_item_properties = array('url' => $page['url']);
-    $existing_menu_items = array();
+    $menu_item_properties = ['url' => $page['url']];
+    $existing_menu_items = [];
     CRM_Core_BAO_Navigation::retrieve($menu_item_properties, $existing_menu_items);
     if (empty($existing_menu_items)) {
       // Now we're sure it doesn't exist; add it to the menu.
